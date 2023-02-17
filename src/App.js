@@ -8,18 +8,24 @@ function App() {
   useEffect(() => {
     setAddressList(getMatchingAddresses.items);
   }, []);
+  const parcelId = 123;
 
-  // Mock validating and invalidating address
-  const updateAddressStatus = (addressId, validated) => {
-    // Invalidate All addresses to ensure only one address is validated at a time
+  const updateAddressStatus = (addressToUpdate) => {
+    fetch("/validate_source_address", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ parcelId, addressId: addressToUpdate.addressId }),
+    });
+
+    // Mock Endpoint functionality
     let addressListCopy = [...addressList].map((address) => ({
       ...address,
       validated: false,
     }));
     const updatedAddressIndex = addressListCopy.findIndex(
-      (address) => address.addressId === addressId
+      (address) => address.addressId === addressToUpdate.addressId
     );
-    addressListCopy[updatedAddressIndex].validated = validated;
+    addressListCopy[updatedAddressIndex].validated = !addressToUpdate.validated;
     setAddressList(addressListCopy);
   };
 
@@ -28,10 +34,10 @@ function App() {
       className="App"
       style={{
         minHeight: "100vh",
-        minWidth: "100vw",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#f2f2f2",
       }}
     >
       <CandidateAddressList

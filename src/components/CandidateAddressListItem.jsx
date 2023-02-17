@@ -35,9 +35,8 @@ export default function CandidateAddressListItem({
         <Button
           variant="text"
           size="small"
-          onClick={() =>
-            updateAddressStatus(address.addressId, !address.validated)
-          }
+          onClick={() => updateAddressStatus(address)}
+          updatedAddress
         >
           {address.validated ? "Revoke" : "Associate"}
         </Button>
